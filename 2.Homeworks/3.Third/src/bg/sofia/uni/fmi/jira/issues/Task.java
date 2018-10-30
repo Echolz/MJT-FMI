@@ -6,13 +6,23 @@ import bg.sofia.uni.fmi.jira.enums.IssuePriority;
 import bg.sofia.uni.fmi.jira.enums.IssueType;
 import bg.sofia.uni.fmi.jira.issues.exceptions.InvalidReporterException;
 
+import java.time.LocalDateTime;
+
 public class Task extends Issue {
-    public Task(IssuePriority priority, Component component, User reporter, String description) throws InvalidReporterException {
+    private LocalDateTime dueTime;
+
+    public Task(IssuePriority priority, Component component, User reporter, String description, LocalDateTime dueTime) throws InvalidReporterException {
         super(priority, component, reporter, description);
+        this.dueTime = dueTime;
     }
 
     @Override
     public IssueType getType() {
         return IssueType.TASK;
+    }
+
+    @Override
+    public LocalDateTime getDueTime() {
+        return dueTime;
     }
 }

@@ -65,6 +65,10 @@ public abstract class Issue implements IIssue {
         return lastModified;
     }
 
+    public LocalDateTime getDueTime() {
+        return null;
+    }
+
     public abstract IssueType getType();
 
     @Override

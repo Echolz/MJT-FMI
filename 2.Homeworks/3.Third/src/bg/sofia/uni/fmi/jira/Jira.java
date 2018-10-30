@@ -97,7 +97,7 @@ public class Jira implements IssueTracker {
         Issue[] toReturn = Arrays.copyOf(issues, issues.length);
 
         for (int i = 0; i < toReturn.length; i++) {
-            if (toReturn[i].getCreatedAt().compareTo(dueTime) <= 0) {
+            if (toReturn[i].getDueTime() != null && toReturn[i].getDueTime().compareTo(dueTime) <= 0) {
                 continue;
             }
 
