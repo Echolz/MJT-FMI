@@ -8,6 +8,7 @@ import bg.sofia.uni.fmi.jira.enums.IssueStatus;
 import bg.sofia.uni.fmi.jira.enums.IssueType;
 import bg.sofia.uni.fmi.jira.interfaces.IIssue;
 import bg.sofia.uni.fmi.jira.issues.exceptions.InvalidReporterException;
+import bg.sofia.uni.fmi.jira.issues.exceptions.NullDependency;
 
 import java.time.LocalDateTime;
 
@@ -25,6 +26,14 @@ public abstract class Issue implements IIssue {
     private int id;
 
     public Issue(IssuePriority priority, Component component, User reporter, String description) throws InvalidReporterException {
+        if (reporter == null) {
+            throw new InvalidReporterException();
+        }
+
+        if (priority == null || component == null || description == null) {
+            throw new NullDependency();
+        }
+
         this.priority = priority;
         this.component = component;
         this.reporter = reporter;
@@ -73,12 +82,18 @@ public abstract class Issue implements IIssue {
 
     @Override
     public void resolve(IssueResolution resolution) {
+        if (resolution == null) {
+            throw new NullDependency();
+        }
         this.resolution = resolution;
         lastModified = LocalDateTime.now();
     }
 
     @Override
     public void setStatus(IssueStatus status) {
+        if (status == null) {
+            throw new NullDependency();
+        }
         this.status = status;
         lastModified = LocalDateTime.now();
     }

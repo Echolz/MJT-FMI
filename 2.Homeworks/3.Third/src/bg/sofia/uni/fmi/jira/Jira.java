@@ -22,7 +22,7 @@ public class Jira implements IssueTracker {
         Issue[] toReturn = Arrays.copyOf(issues, issues.length);
 
         for (int i = 0; i < issues.length; i++) {
-            if (toReturn[i].getComponent().equals(component) && toReturn[i].getStatus().equals(status)) {
+            if (toReturn[i] != null && toReturn[i].getStatus() != null && toReturn[i].getComponent() != null && toReturn[i].getComponent().equals(component) && toReturn[i].getStatus().equals(status)) {
                 continue;
             }
 
@@ -37,7 +37,7 @@ public class Jira implements IssueTracker {
         Issue[] toReturn = Arrays.copyOf(issues, issues.length);
 
         for (int i = 0; i < toReturn.length; i++) {
-            if (toReturn[i].getComponent().equals(component) && toReturn[i].getPriority().equals(priority)) {
+            if (toReturn[i] != null && toReturn[i].getPriority() != null && toReturn[i].getComponent().equals(component) && toReturn[i].getComponent().equals(component) && toReturn[i].getPriority().equals(priority)) {
                 continue;
             }
 
@@ -52,7 +52,7 @@ public class Jira implements IssueTracker {
         Issue[] toReturn = Arrays.copyOf(issues, issues.length);
 
         for (int i = 0; i < toReturn.length; i++) {
-            if (toReturn[i].getComponent().equals(component) && toReturn[i].getType().equals(type)) {
+            if (toReturn[i] != null && toReturn[i].getComponent() != null && toReturn[i].getType() != null && toReturn[i].getComponent().equals(component) && toReturn[i].getType().equals(type)) {
                 continue;
             }
 
@@ -67,7 +67,7 @@ public class Jira implements IssueTracker {
         Issue[] toReturn = Arrays.copyOf(issues, issues.length);
 
         for (int i = 0; i < toReturn.length; i++) {
-            if (toReturn[i].getComponent().equals(component) && toReturn[i].getResolution().equals(resolution)) {
+            if (toReturn[i] != null && toReturn[i].getComponent() != null && toReturn[i].getResolution() != null && toReturn[i].getComponent().equals(component) && toReturn[i].getResolution().equals(resolution)) {
                 continue;
             }
 
@@ -82,7 +82,7 @@ public class Jira implements IssueTracker {
         Issue[] toReturn = Arrays.copyOf(issues, issues.length);
 
         for (int i = 0; i < toReturn.length; i++) {
-            if (toReturn[i].getCreatedAt().compareTo(startTime) >= 0 && toReturn[i].getCreatedAt().compareTo(endTime) <= 0) {
+            if (toReturn[i] != null && toReturn[i].getCreatedAt().compareTo(startTime) >= 0 && toReturn[i].getCreatedAt().compareTo(endTime) <= 0) {
                 continue;
             }
 
@@ -97,7 +97,7 @@ public class Jira implements IssueTracker {
         Issue[] toReturn = Arrays.copyOf(issues, issues.length);
 
         for (int i = 0; i < toReturn.length; i++) {
-            if (toReturn[i].getDueTime() != null && toReturn[i].getDueTime().compareTo(dueTime) <= 0) {
+            if (toReturn[i] != null && toReturn[i].getDueTime() != null && toReturn[i].getDueTime().compareTo(dueTime) <= 0) {
                 continue;
             }
 
