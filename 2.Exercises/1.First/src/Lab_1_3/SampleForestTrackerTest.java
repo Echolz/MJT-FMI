@@ -1,4 +1,4 @@
-package HW_1_3;
+package Lab_1_3;
 import java.util.Arrays;
 
 import org.junit.Assert;

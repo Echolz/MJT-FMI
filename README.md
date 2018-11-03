@@ -1,15 +1,15 @@
 # MJT-FMI
 
-## [Homeworks](https://github.com/Echolz/MJT-FMI/tree/master/2.Homeworks "All homeworks")
+## [Coding Exercises in class](https://github.com/Echolz/MJT-FMI/tree/master/2.Exercises "All exercises")
 
-* [First homework](https://github.com/Echolz/MJT-FMI/tree/master/2.Homeworks/1.First/src)
+* [First exercise](https://github.com/Echolz/MJT-FMI/tree/master/2.Exercises/1.First/src)
 
-* [Second homework](https://github.com/Echolz/MJT-FMI/tree/master/2.Homeworks/2.Second/src/bg/fmi/mjt/lab/coffee_machine)
+* [Second exercise](https://github.com/Echolz/MJT-FMI/tree/master/2.Exercises/2.Second/src/bg/fmi/mjt/lab/coffee_machine)
 
-* [Third homework](https://github.com/Echolz/MJT-FMI/tree/master/2.Homeworks/3.Third/src/bg/sofia/uni/fmi/jira)
+* [Third exercise](https://github.com/Echolz/MJT-FMI/tree/master/2.Exercises/3.Third/src/bg/sofia/uni/fmi/jira)
+
+## [Homeworks](https://github.com/Echolz/MJT-FMI/tree/master/3.Homeworks "All homeworks")
 
 ## [Exams](https://github.com/Echolz/MJT-FMI/tree/master/4.Exams "All exams")
-
-## [Coding Exercises in class](https://github.com/Echolz/MJT-FMI/tree/master/3.Exercises "All excercises")
 
 ## [Lectures](https://github.com/Echolz/MJT-FMI/tree/master/1.Lectures "All lectures")

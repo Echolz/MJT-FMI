@@ -1,4 +1,4 @@
-package HW_1_1;
+package Lab_1_1;
 
 import static org.junit.Assert.assertEquals;
 

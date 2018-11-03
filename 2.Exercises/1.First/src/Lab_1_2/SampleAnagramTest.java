@@ -1,4 +1,4 @@
-package HW_1_2;
+package Lab_1_2;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
