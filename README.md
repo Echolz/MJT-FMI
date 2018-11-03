@@ -4,9 +4,11 @@
 
 * [First exercise](https://github.com/Echolz/MJT-FMI/tree/master/2.Exercises/1.First/src)
 
-* [Second exercise](https://github.com/Echolz/MJT-FMI/tree/master/2.Exercises/2.Second/src/bg/fmi/mjt/lab/coffee_machine)
+* [Second exercise](https://github.com/Echolz/MJT-FMI/tree/master/2.Exercises/2.Second/src/bg/fmi/mjt/lab/coffee_machine "Coffee machine")
 
-* [Third exercise](https://github.com/Echolz/MJT-FMI/tree/master/2.Exercises/3.Third/src/bg/sofia/uni/fmi/jira)
+* [Third exercise](https://github.com/Echolz/MJT-FMI/tree/master/2.Exercises/3.Third/src/bg/sofia/uni/fmi/jira "JIRA")
+
+* [Fourth exercise](https://github.com/Echolz/MJT-FMI/tree/master/2.Exercises/4.Fourth/src/bg/sofia/uni/fmi/mjt/carstore "Carstore")
 
 ## [Homeworks](https://github.com/Echolz/MJT-FMI/tree/master/3.Homeworks "All homeworks")
 
