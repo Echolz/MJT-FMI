@@ -12,6 +12,8 @@
 
 ## [Homeworks](https://github.com/Echolz/MJT-FMI/tree/master/3.Homeworks "All homeworks")
 
+* [First homework](https://github.com/Echolz/MJT-FMI/tree/master/3.Homeworks/1.First/src/bg/sofia/uni/fmi/mjt/git "Git")
+
 ## [Exams](https://github.com/Echolz/MJT-FMI/tree/master/4.Exams "All exams")
 
 ## [Lectures](https://github.com/Echolz/MJT-FMI/tree/master/1.Lectures "All lectures")
