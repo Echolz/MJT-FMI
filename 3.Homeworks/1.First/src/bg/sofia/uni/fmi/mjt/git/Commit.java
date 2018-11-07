@@ -7,6 +7,10 @@ public class Commit {
     private String hash;
     private TemporalAccessor createdDate;
 
+    public Commit(String message) {
+        this.message = message;
+    }
+
     public String getHash() {
         return null;
     }

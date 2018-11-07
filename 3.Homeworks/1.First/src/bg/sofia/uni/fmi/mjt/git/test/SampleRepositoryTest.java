@@ -1,9 +1,5 @@
 package bg.sofia.uni.fmi.mjt.git.test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 import bg.sofia.uni.fmi.mjt.git.Repository;
 import bg.sofia.uni.fmi.mjt.git.Result;
 import bg.sofia.uni.fmi.mjt.git.utils.DateFormatter;
@@ -11,6 +7,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.time.LocalDateTime;
+
+import static org.junit.Assert.*;
 
 public class SampleRepositoryTest {
 
@@ -33,9 +31,36 @@ public class SampleRepositoryTest {
 
         Result actual = repo.remove("foo.txt", "baz.txt");
         assertFail("'baz.txt' did not match any files", actual);
+    }
 
-//        actual = repo.commit("After removal");
-//        assertSuccess("2 files changed", actual);
+    @Test
+    public void testGetHead_ReturnsNullWhenNoCommitsAreDone() {
+        assertNull(repo.getHead());
+    }
+
+    @Test
+    public void testCommit_CorrectMessageAfterAddingFilesAndDeletingNotExistingFiles() {
+        repo.add("foo.txt", "bar.txt");
+
+        Result actual = repo.remove("foo.txt", "baz.txt");
+        assertFail("'baz.txt' did not match any files", actual);
+
+        actual = repo.commit("After removal");
+        assertSuccess("2 files changed", actual);
+    }
+
+    @Test
+    public void testCreateBranch_CorrectMessageWhenTryingToCreateMaster() {
+        Result actual = repo.createBranch("master");
+
+        assertFail("branch master already exists", actual);
+    }
+
+    @Test
+    public void testCreateBranch_CorrectMessageWhenCreatingANewBranch() {
+        Result actual = repo.createBranch("new branch");
+
+        assertSuccess("created branch new branch", actual);
     }
 
     @Test
@@ -43,6 +68,32 @@ public class SampleRepositoryTest {
         LocalDateTime date = LocalDateTime.of(2000, 12, 12, 12, 12);
 
         assertEquals("12 12 12:12 2000", DateFormatter.formatDate(date));
+    }
+
+    @Test
+    public void testLog_GivesProperMessageWhenNoCommitsAreDoneToMaster() {
+        Result actual = repo.log();
+
+        assertFail("master does not have any commits yet", actual);
+    }
+
+    @Test
+    public void testGetBranch_ReturnsMasterAfterCreationOfRepository() {
+        assertEquals("master", repo.getBranch());
+    }
+
+    @Test
+    public void testCheckout_ReturnsProperMessageWhenBranchDoesNotExist() {
+        assertFail("branch wow does not exist", repo.checkoutBranch("wow"));
+    }
+
+    @Test
+    public void testCheckout_ReturnsProperMessageWhenBranchExists() {
+        repo.createBranch("new branch");
+        
+        Result actual = repo.checkoutBranch("new branch");
+
+        assertSuccess("switched to branch new branch", actual);
     }
 
     @Test
