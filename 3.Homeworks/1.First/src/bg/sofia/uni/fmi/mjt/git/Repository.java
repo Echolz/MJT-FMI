@@ -3,7 +3,8 @@ package bg.sofia.uni.fmi.mjt.git;
 import java.util.*;
 
 public class Repository {
-    private Set<String> setOfStagedFiles;
+    private Set<String> setOfFilesToAdd;
+    private Set<String> setOfFilesToRemove;
     private Map<String, List<Commit>> branchToCommits;
     private String currentBranch;
 
@@ -16,7 +17,7 @@ public class Repository {
         boolean hasExisting = false;
 
         for (String file : files) {
-            if (!setOfStagedFiles.contains(file)) {
+            if (!setOfFilesToAdd.contains(file)) {
                 continue;
             }
 
@@ -34,7 +35,8 @@ public class Repository {
         message.append("added ");
 
         for (String file : files) {
-            setOfStagedFiles.add(file);
+            setOfFilesToAdd.add(file);
+            setOfFilesToRemove.remove(file);
             message.append(String.format("%s, ", file));
         }
 
@@ -49,7 +51,7 @@ public class Repository {
         boolean hasNonExisting = false;
 
         for (String file : files) {
-            if (setOfStagedFiles.contains(file)) {
+            if (setOfFilesToAdd.contains(file)) {
                 continue;
             }
 
@@ -67,7 +69,8 @@ public class Repository {
         message.append("added ");
 
         for (String file : files) {
-            setOfStagedFiles.remove(file);
+            setOfFilesToAdd.remove(file);
+            setOfFilesToRemove.add(file);
             message.append(String.format("%s, ", file));
         }
 
@@ -77,9 +80,22 @@ public class Repository {
         return new Result(true, message.toString());
     }
 
+    // TODO: 9.11.2018 г.  
     public Result commit(String message) {
+        if (setOfFilesToRemove.size() == 0 && setOfFilesToAdd.size() == 0) {
+            return new Result(false, "nothing to commit, working tree clean");
+        }
 
-        return null;
+        // creating a result when commit is valid
+        int numberOfChangedFiles = setOfFilesToAdd.size() + setOfFilesToRemove.size();
+        Result toReturn = new Result(true, String.format("%d files changed", numberOfChangedFiles));
+
+        // creating and adding commit
+        Commit commit = new Commit(message);
+        branchToCommits.get(currentBranch).add(commit);
+
+        // clearing sets for the new commit
+        return toReturn;
     }
 
     public Commit getHead() {
@@ -92,6 +108,7 @@ public class Repository {
         return commits.get(commits.size() - 1);
     }
 
+    // TODO: 9.11.2018 г.
     public Result log() {
         List<Commit> commits = branchToCommits.get(currentBranch);
 
@@ -121,19 +138,21 @@ public class Repository {
     public Result checkoutBranch(String name) {
         if (!branchToCommits.containsKey(name)) {
             return new Result(false, String.format("branch %s does not exist", name));
-        } else {
-            currentBranch = name;
-            return new Result(true, String.format("switched to branch %s", name));
         }
+
+        currentBranch = name;
+        return new Result(true, String.format("switched to branch %s", name));
     }
 
+    // TODO: 9.11.2018 г.
     Result checkoutCommit(String hash) {
 
         return null;
     }
 
     private void setUp() {
-        setOfStagedFiles = new LinkedHashSet<>();
+        setOfFilesToAdd = new LinkedHashSet<>();
+        setOfFilesToRemove = new LinkedHashSet<>();
         branchToCommits = new HashMap<>();
         branchToCommits.put("master", new ArrayList<>());
         currentBranch = "master";

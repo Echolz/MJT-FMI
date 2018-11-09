@@ -64,13 +64,6 @@ public class SampleRepositoryTest {
     }
 
     @Test
-    public void testDateFormat_GeneratesProperStringFromDate() {
-        LocalDateTime date = LocalDateTime.of(2000, 12, 12, 12, 12);
-
-        assertEquals("12 12 12:12 2000", DateFormatter.formatDate(date));
-    }
-
-    @Test
     public void testLog_GivesProperMessageWhenNoCommitsAreDoneToMaster() {
         Result actual = repo.log();
 
@@ -101,12 +94,14 @@ public class SampleRepositoryTest {
         repo.add("src/Main.java");
         repo.commit("Add Main.java");
 
+        assertEquals("Add Main.java", repo.getHead().getMessage());
+
         repo.createBranch("dev");
         Result actual = repo.checkoutBranch("dev");
         assertSuccess("switched to branch dev", actual);
 
         repo.remove("src/Main.java");
-        repo.commit("Remove Main.java");
+        System.out.println(repo.commit("Remove Main.java").getMessage());
         assertEquals("Remove Main.java", repo.getHead().getMessage());
 
         actual = repo.checkoutBranch("master");
