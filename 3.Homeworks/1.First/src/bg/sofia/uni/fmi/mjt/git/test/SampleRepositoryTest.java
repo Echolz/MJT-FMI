@@ -101,7 +101,6 @@ public class SampleRepositoryTest {
         assertSuccess("switched to branch dev", actual);
 
         repo.remove("src/Main.java");
-        System.out.println(repo.commit("Remove Main.java").getMessage());
         assertEquals("Remove Main.java", repo.getHead().getMessage());
 
         actual = repo.checkoutBranch("master");

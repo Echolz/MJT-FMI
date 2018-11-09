@@ -1,10 +1,9 @@
 package bg.sofia.uni.fmi.mjt.git;
 
 import bg.sofia.uni.fmi.mjt.git.utils.DateFormatter;
+import bg.sofia.uni.fmi.mjt.git.utils.HashGenerator;
 
-import java.time.DayOfWeek;
 import java.time.LocalDateTime;
-import java.util.Calendar;
 
 public class Commit {
     private String message;
@@ -12,20 +11,23 @@ public class Commit {
     private LocalDateTime createdDate;
     private String dateAsString;
 
-    // TODO: 9.11.2018 г.  
     public Commit(String message) {
         this.message = message;
         createdDate = LocalDateTime.now();
         dateAsString = DateFormatter.formatDate(createdDate);
-        System.out.println(dateAsString);
+        hash = HashGenerator.hexDigest(String .format("%s%s", dateAsString, message));
     }
 
-    // TODO: 9.11.2018 г.
     public String getHash() {
-        return null;
+        return hash;
     }
 
     public String getMessage() {
         return this.message;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("commit %s\nDate: %s\n\n\t%s", hash, dateAsString, message);
     }
 }

@@ -116,7 +116,17 @@ public class Repository {
             return new Result(false, String.format("%s does not have any commits yet", currentBranch));
         }
 
-        return null;
+        StringBuilder resultMessage = new StringBuilder();
+
+        for (int i = 0; i < commits.size(); i++) {
+            resultMessage.append(commits.get(i).toString());
+            if (i == commits.size() - 1) {
+                break;
+            }
+            resultMessage.append("\n");
+        }
+
+        return new Result(true, resultMessage.toString());
     }
 
     public String getBranch() {
