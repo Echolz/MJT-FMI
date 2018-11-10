@@ -14,7 +14,7 @@ public class DateFormatter {
         return String.format("%s %s %s", getDayOfWeek(time.getDayOfWeek()), getMonth(time.getMonth()), formatter.format(time));
     }
 
-    static public String getDayOfWeek(DayOfWeek dayOfWeek) {
+    static private String getDayOfWeek(DayOfWeek dayOfWeek) {
         return dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.ENGLISH);
     }
 

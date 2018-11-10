@@ -3,9 +3,11 @@ package bg.sofia.uni.fmi.mjt.git;
 import java.util.*;
 
 public class Repository {
-    private Set<String> setOfFilesToAdd;
-    private Set<String> setOfFilesToRemove;
-    private Map<String, List<Commit>> branchToCommits;
+    private Set<String> lastCommitFiles;
+    private Set<String> stagedFiles;
+    private int lastCommitDeletedFiles;
+    private Map<String, Deque<Commit>> branchToCommits;
+    private Map<String, Commit> hashToCommit;
     private String currentBranch;
 
     public Repository() {
@@ -14,36 +16,35 @@ public class Repository {
 
     public Result add(String... files) {
         String existingFile = "";
-        boolean hasExisting = false;
+        boolean hasExistingFile = false;
 
         for (String file : files) {
-            if (!setOfFilesToAdd.contains(file)) {
+            if (!lastCommitFiles.contains(file) && !stagedFiles.contains(file)) {
                 continue;
             }
 
-            hasExisting = true;
+            hasExistingFile = true;
             existingFile = file;
             break;
         }
 
-        if (hasExisting) {
+        if (hasExistingFile) {
             return new Result(false, String.format("'%s' already exists", existingFile));
         }
 
-        StringBuilder message = new StringBuilder();
+        StringBuilder resultMessage = new StringBuilder();
 
-        message.append("added ");
+        resultMessage.append("added ");
 
         for (String file : files) {
-            setOfFilesToAdd.add(file);
-            setOfFilesToRemove.remove(file);
-            message.append(String.format("%s, ", file));
+            stagedFiles.add(file);
+            resultMessage.append(String.format("%s, ", file));
         }
 
-        message.setLength(message.length() - 2);
-        message.append(" to stage");
+        resultMessage.setLength(resultMessage.length() - 2);
+        resultMessage.append(" to stage");
 
-        return new Result(true, message.toString());
+        return new Result(true, resultMessage.toString());
     }
 
     public Result remove(String... files) {
@@ -51,7 +52,7 @@ public class Repository {
         boolean hasNonExisting = false;
 
         for (String file : files) {
-            if (setOfFilesToAdd.contains(file)) {
+            if (stagedFiles.contains(file) || lastCommitFiles.contains(file)) {
                 continue;
             }
 
@@ -69,9 +70,13 @@ public class Repository {
         message.append("added ");
 
         for (String file : files) {
-            setOfFilesToAdd.remove(file);
-            setOfFilesToRemove.add(file);
             message.append(String.format("%s, ", file));
+            if (stagedFiles.remove(file)) {
+                continue;
+            }
+
+            lastCommitFiles.remove(file);
+            lastCommitDeletedFiles++;
         }
 
         message.setLength(message.length() - 2);
@@ -80,51 +85,41 @@ public class Repository {
         return new Result(true, message.toString());
     }
 
-    // TODO: 9.11.2018 г.  
     public Result commit(String message) {
-        if (setOfFilesToRemove.size() == 0 && setOfFilesToAdd.size() == 0) {
+        if (lastCommitDeletedFiles == 0 && stagedFiles.size() == 0) {
             return new Result(false, "nothing to commit, working tree clean");
         }
 
-        // creating a result when commit is valid
-        int numberOfChangedFiles = setOfFilesToAdd.size() + setOfFilesToRemove.size();
-        Result toReturn = new Result(true, String.format("%d files changed", numberOfChangedFiles));
+        Result toReturn = new Result(true, String.format("%s files changed", stagedFiles.size() + lastCommitDeletedFiles));
 
-        // creating and adding commit
-        Commit commit = new Commit(message);
-        branchToCommits.get(currentBranch).add(commit);
+        lastCommitFiles.addAll(stagedFiles);
+        Commit commit = new Commit(message, lastCommitFiles);
+        branchToCommits.get(currentBranch).addLast(commit);
+        hashToCommit.put(commit.getHash(), commit);
 
-        // clearing sets for the new commit
+        resetStage();
+
         return toReturn;
     }
 
     public Commit getHead() {
-        List<Commit> commits = branchToCommits.get(currentBranch);
-
-        if (commits.size() == 0) {
-            return null;
-        }
-
-        return commits.get(commits.size() - 1);
+        return branchToCommits.get(currentBranch).peekLast();
     }
 
-    // TODO: 9.11.2018 г.
     public Result log() {
-        List<Commit> commits = branchToCommits.get(currentBranch);
-
-        if (commits.size() == 0) {
-            return new Result(false, String.format("%s does not have any commits yet", currentBranch));
+        if (branchToCommits.get(currentBranch).size() == 0) {
+            return new Result(false, String.format("branch %s does not have any commits yet", currentBranch));
         }
 
         StringBuilder resultMessage = new StringBuilder();
 
-        for (int i = 0; i < commits.size(); i++) {
-            resultMessage.append(commits.get(i).toString());
-            if (i == commits.size() - 1) {
-                break;
-            }
+        for (Commit commit : branchToCommits.get(currentBranch)) {
+            resultMessage.append(commit.toString());
+            resultMessage.append("\n");
             resultMessage.append("\n");
         }
+
+        resultMessage.setLength(resultMessage.length() - 2);
 
         return new Result(true, resultMessage.toString());
     }
@@ -138,10 +133,15 @@ public class Repository {
             return new Result(false, String.format("branch %s already exists", name));
         }
 
-        List<Commit> newBranchCommits = new ArrayList<>(branchToCommits.get(currentBranch));
+        Deque<Commit> lastBranchCommits;
 
-        branchToCommits.put(name, newBranchCommits);
+        if (name.equals("master")) {
+            lastBranchCommits = new LinkedList<>();
+        } else {
+            lastBranchCommits = new LinkedList<>(branchToCommits.get(currentBranch));
+        }
 
+        branchToCommits.put(name, lastBranchCommits);
         return new Result(true, String.format("created branch %s", name));
     }
 
@@ -151,20 +151,49 @@ public class Repository {
         }
 
         currentBranch = name;
+
+        resetStage();
+
         return new Result(true, String.format("switched to branch %s", name));
+
     }
 
-    // TODO: 9.11.2018 г.
-    Result checkoutCommit(String hash) {
+    public Result checkoutCommit(String hash) {
+        if (!hashToCommit.containsKey(hash)) {
+            return new Result(false, String.format("commit %s does not exist", hash));
+        }
 
-        return null;
+        Deque<Commit> currentBranchCommits = branchToCommits.get(currentBranch);
+
+        while (!currentBranchCommits.peekLast().getHash().equals(hash)) {
+            currentBranchCommits.pollLast();
+        }
+
+        resetStage();
+
+        return new Result(true, String.format("HEAD is now at %s", hash));
+    }
+
+    private void resetStage() {
+        stagedFiles = new LinkedHashSet<>();
+        lastCommitFiles = getLastCommitFiles();
+        lastCommitDeletedFiles = 0;
+    }
+
+    private Set<String> getLastCommitFiles() {
+        Commit lastBranchCommit = getHead();
+        lastCommitDeletedFiles = 0;
+        if (lastBranchCommit == null) {
+            return new LinkedHashSet<>();
+        } else {
+            return lastBranchCommit.getFiles();
+        }
     }
 
     private void setUp() {
-        setOfFilesToAdd = new LinkedHashSet<>();
-        setOfFilesToRemove = new LinkedHashSet<>();
         branchToCommits = new HashMap<>();
-        branchToCommits.put("master", new ArrayList<>());
-        currentBranch = "master";
+        createBranch("master");
+        checkoutBranch("master");
+        hashToCommit = new HashMap<>();
     }
 }
