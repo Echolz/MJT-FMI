@@ -113,9 +113,9 @@ public class Repository {
 
         StringBuilder resultMessage = new StringBuilder();
 
-        for (Commit commit : branchToCommits.get(currentBranch)) {
+        for (Iterator<Commit> it = branchToCommits.get(currentBranch).descendingIterator(); it.hasNext(); ) {
+            Commit commit = it.next();
             resultMessage.append(commit.toString());
-            resultMessage.append("\n");
             resultMessage.append("\n");
         }
 
@@ -166,6 +166,7 @@ public class Repository {
         Deque<Commit> currentBranchCommits = branchToCommits.get(currentBranch);
 
         while (!currentBranchCommits.peekLast().getHash().equals(hash)) {
+            hashToCommit.remove(currentBranchCommits.peekLast().getHash());
             currentBranchCommits.pollLast();
         }
 

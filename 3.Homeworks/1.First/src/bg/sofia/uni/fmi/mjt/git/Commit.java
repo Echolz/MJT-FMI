@@ -40,6 +40,6 @@ public class Commit {
 
     @Override
     public String toString() {
-        return String.format("commit %s\nDate: %s\n\n\t%s", hash, dateAsString, message);
+        return String.format("commit %s\nDate: %s\n\n\t%s\n", hash, dateAsString, message);
     }
 }
