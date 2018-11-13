@@ -11,9 +11,10 @@ public class MemCache<K, V> implements Cache<K, V> {
     private long capacity;
     private int hit;
     private int miss;
+    private static final int DEFAULT_CAPACITY = 10_000;
 
     public MemCache() {
-        this(10000);
+        this(DEFAULT_CAPACITY);
     }
 
     public MemCache(long capacity) {
@@ -135,7 +136,7 @@ public class MemCache<K, V> implements Cache<K, V> {
         } else if (miss == 0) {
             return 1.0;
         } else {
-            return (double) hit / (double) miss;
+            return (double) hit / (double) (hit + miss);
         }
     }
 }
