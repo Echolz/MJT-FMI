@@ -10,6 +10,8 @@
 
 * [Fourth exercise](https://github.com/Echolz/MJT-FMI/tree/master/2.Exercises/4.Fourth/src/bg/sofia/uni/fmi/mjt/carstore "Carstore")
 
+* [Fifth exercise](https://github.com/Echolz/MJT-FMI/tree/master/2.Exercises/5.Fifth "Generic Cache")
+
 ## [Homeworks](https://github.com/Echolz/MJT-FMI/tree/master/3.Homeworks "All homeworks")
 
 * [First homework](https://github.com/Echolz/MJT-FMI/tree/master/3.Homeworks/1.First/src/bg/sofia/uni/fmi/mjt/git "Git")
