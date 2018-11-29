@@ -1,6 +1,10 @@
 package bg.sofia.uni.fmi.mjt.stylechecker;
 
-import bg.sofia.uni.fmi.mjt.stylechecker.utils.LineChecker;
+import bg.sofia.uni.fmi.mjt.stylechecker.checkers.LineChecker;
+import bg.sofia.uni.fmi.mjt.stylechecker.checkers.impl.BracketsChecker;
+import bg.sofia.uni.fmi.mjt.stylechecker.checkers.impl.ImportsChecker;
+import bg.sofia.uni.fmi.mjt.stylechecker.checkers.impl.LineLengthChecker;
+import bg.sofia.uni.fmi.mjt.stylechecker.checkers.impl.StatementChecker;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -28,12 +32,10 @@ public class StyleChecker {
 
     public StyleChecker(InputStream inputStream) {
         properties = new Properties();
-        if (inputStream == null) {
-            initProperties();
-        } else {
+        initProperties();
+        if (inputStream != null) {
             initProperties(inputStream);
         }
-
         initCheckers();
     }
 
@@ -41,20 +43,20 @@ public class StyleChecker {
         lineCheckers = new ArrayList<>();
 
         if (isPropertySet(OPENING_BRACKET_CHECK)) {
-
+            lineCheckers.add(new BracketsChecker());
         }
 
         if (isPropertySet(STATEMENTS_PER_LINE_CHECK)) {
-
+            lineCheckers.add(new StatementChecker());
         }
 
         if (isPropertySet(LENGTH_OF_LINE_CHECK)) {
             int lineLimit = Integer.parseInt(properties.getProperty(LINE_LENGTH_LIMIT));
-
+            lineCheckers.add(new LineLengthChecker(lineLimit));
         }
 
         if (isPropertySet(WILDCARD_IMPORT_CHECK)) {
-
+            lineCheckers.add(new ImportsChecker());
         }
     }
 
