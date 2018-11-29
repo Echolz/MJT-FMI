@@ -7,7 +7,7 @@ public class BracketsChecker implements LineChecker {
 
     @Override
     public boolean checkLine(String line) {
-        return false;
+        return line.startsWith("import") && line.endsWith(".*;");
     }
 
     @Override

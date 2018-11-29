@@ -5,10 +5,12 @@ import bg.sofia.uni.fmi.mjt.stylechecker.checkers.impl.BracketsChecker;
 import bg.sofia.uni.fmi.mjt.stylechecker.checkers.impl.ImportsChecker;
 import bg.sofia.uni.fmi.mjt.stylechecker.checkers.impl.LineLengthChecker;
 import bg.sofia.uni.fmi.mjt.stylechecker.checkers.impl.StatementChecker;
+import bg.sofia.uni.fmi.mjt.stylechecker.utils.StreamParser;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -88,6 +90,34 @@ public class StyleChecker {
     }
 
     public void checkStyle(InputStream source, OutputStream output) {
+        List<String> lines = StreamParser.parse(source);
+        List<String> newLines = createNewLines(lines);
+        writeLines(newLines, output);
+    }
 
+    private void writeLines(List<String> lines, OutputStream output) {
+        PrintWriter writer = new PrintWriter(output);
+        lines.forEach(writer::println);
+        writer.close();
+    }
+
+    private List<String> createNewLines(List<String> lines) {
+        List<String> newLines = new ArrayList<>();
+
+        for (String line : lines) {
+            if (line.equals("")) {
+                newLines.add(line);
+                continue;
+            }
+
+            for (LineChecker lineChecker : lineCheckers) {
+                if (lineChecker.checkLine(line)) {
+                    newLines.add(lineChecker.getMessage());
+                }
+            }
+            newLines.add(line);
+        }
+
+        return newLines;
     }
 }

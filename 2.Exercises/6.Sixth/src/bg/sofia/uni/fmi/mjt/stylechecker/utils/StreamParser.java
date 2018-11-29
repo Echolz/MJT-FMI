@@ -7,7 +7,7 @@ import java.io.InputStreamReader;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class InputStreamParser {
+public class StreamParser {
     public static List<String> parse(InputStream inputStream) {
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
             return reader.lines().map(String::trim).collect(Collectors.toList());

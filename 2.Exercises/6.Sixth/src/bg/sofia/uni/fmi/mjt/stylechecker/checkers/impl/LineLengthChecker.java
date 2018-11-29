@@ -8,15 +8,16 @@ public class LineLengthChecker implements LineChecker {
 
     public LineLengthChecker(int maxLineLength) {
         this.maxLineLength = maxLineLength;
+        message = String.format(message, maxLineLength);
     }
 
     @Override
     public boolean checkLine(String line) {
-        return false;
+        return line.length() > maxLineLength;
     }
 
     @Override
     public String getMessage() {
-        return String.format(message, maxLineLength);
+        return message;
     }
 }
