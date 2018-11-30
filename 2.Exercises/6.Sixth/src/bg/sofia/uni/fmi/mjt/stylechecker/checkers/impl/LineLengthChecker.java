@@ -13,6 +13,9 @@ public class LineLengthChecker implements LineChecker {
 
     @Override
     public boolean checkLine(String line) {
+        if (line.startsWith("import")) {
+            return false;
+        }
         return line.length() > maxLineLength;
     }
 

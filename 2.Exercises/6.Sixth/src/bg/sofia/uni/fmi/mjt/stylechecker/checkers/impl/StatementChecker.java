@@ -8,7 +8,20 @@ public class StatementChecker implements LineChecker {
 
     @Override
     public boolean checkLine(String line) {
-        return line.matches(lineRegEx);
+        int lastIndex = -1;
+        for (int i = line.length() - 1; i >= 0; i--) {
+            if (line.charAt(i) != ';') {
+                continue;
+            }
+
+            if (lastIndex != -1 && lastIndex != i + 1) {
+                return true;
+            }
+
+            lastIndex = i;
+        }
+
+        return false;
     }
 
     @Override

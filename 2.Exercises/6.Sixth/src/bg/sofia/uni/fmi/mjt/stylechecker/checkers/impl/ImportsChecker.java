@@ -7,7 +7,7 @@ public class ImportsChecker implements LineChecker {
 
     @Override
     public boolean checkLine(String line) {
-        return line.startsWith("{");
+        return line.startsWith("import") && line.endsWith(".*;");
     }
 
     @Override
