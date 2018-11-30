@@ -3,12 +3,12 @@ package bg.sofia.uni.fmi.mjt.stylechecker.checkers.impl;
 import bg.sofia.uni.fmi.mjt.stylechecker.checkers.LineChecker;
 
 public class LineLengthChecker implements LineChecker {
-    private static String message = "// FIXME Length of line should not exceed %d characters";
+    private static String message;
     private int maxLineLength;
 
     public LineLengthChecker(int maxLineLength) {
         this.maxLineLength = maxLineLength;
-        message = String.format(message, maxLineLength);
+        message = "// FIXME Length of line should not exceed " + maxLineLength + " characters";
     }
 
     @Override

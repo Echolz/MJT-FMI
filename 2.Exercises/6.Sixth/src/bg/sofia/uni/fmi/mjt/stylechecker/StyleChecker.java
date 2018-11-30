@@ -77,11 +77,10 @@ public class StyleChecker {
     private void initProperties(InputStream inputStream) {
         try {
             properties.load(inputStream);
+            System.out.println(properties);
         } catch (IOException e) {
             initProperties();
         }
-
-
     }
 
     private boolean isPropertySet(String propertyName) {
